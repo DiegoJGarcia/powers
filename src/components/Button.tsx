@@ -15,7 +15,7 @@ type ButtonProps = {
 	flux?: string;
 };
 
-const Button: FC<ButtonProps> = ({
+export const Button: FC<ButtonProps> = ({
 	type,
 	className,
 	icon,
@@ -81,5 +81,3 @@ const Button: FC<ButtonProps> = ({
 		</button>
 	);
 };
-
-export default Button;

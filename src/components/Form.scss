@@ -1,0 +1,45 @@
+.form {
+	display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+	gap: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  background: var(--background_second);
+  width: 600px;
+  
+  &_inputs {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  &_progress {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    gap: 7px;
+    width: stretch;
+    
+    &_bar {
+      background-color: rgb(37, 37, 37);
+      border-radius: 4px;
+      padding: 2px;
+      margin: 0 44px;
+      width: stretch;
+      
+      &--layer {
+        background: var(--background_second);
+        width: 0%;
+        height: 9px;
+        border-radius: 4px;
+      }
+    }
+  }
+}

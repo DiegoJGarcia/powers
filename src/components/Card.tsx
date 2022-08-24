@@ -13,7 +13,13 @@ export type TCardProps = {
 	// drag and drop support, you need wrapp cards with <DDContainer> [TODO]
 };
 
-const Card: FC<TCardProps> = ({ title, status, onClick, className, children }): ReactElement => {
+export const Card: FC<TCardProps> = ({
+	title,
+	status,
+	onClick,
+	className,
+	children,
+}): ReactElement => {
 	const id = useId();
 
 	return (
@@ -29,5 +35,3 @@ const Card: FC<TCardProps> = ({ title, status, onClick, className, children }): 
 		</div>
 	);
 };
-
-export default Card;
