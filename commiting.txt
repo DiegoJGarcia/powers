@@ -1,0 +1,8 @@
+verbs: [
+  config,
+  fix,
+  feat,
+  ref,
+]
+
+[verb]/[task name]: [commit description]

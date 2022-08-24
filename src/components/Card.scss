@@ -1,0 +1,65 @@
+@import "assets/vars";
+
+.card {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: stretch;
+
+	cursor: pointer;
+
+	margin: 20px;
+
+	width: fit-content;
+	height: fit-content;
+
+	border-radius: var(--radius);
+  transition: var(--transition);
+	border: var(--border);
+  background: var(--background_second);
+	
+	&_title {
+		width: stretch;
+		text-align: center;
+
+		background: var(--default);
+		padding: 10px;
+		margin-bottom: 20px;
+	}
+	
+	&_data {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 10px;
+
+		min-width: 150px;
+		min-height: min-content;
+		width: stretch;
+		text-align: center;
+
+		padding:  var(--padding);
+	}
+
+	&:hover {
+		transform: scale(1.05);
+
+  }
+
+	// status
+	&--ok {
+		border: 2px solid var(--ok);
+		background: #419e1cdf;
+	}
+	
+	&--warn {
+		border: 2px solid var(--warning);	
+		background: #d8cd32d9;
+	}
+	
+	&--error {
+		border: 2px solid var(--error);
+		background: #c84a3cc9;
+	}
+}
