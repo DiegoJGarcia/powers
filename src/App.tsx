@@ -1,89 +1,48 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement } from 'react';
 import './App.scss';
 
-import { useTheme } from 'hooks/useTheme';
+import { useTheme } from 'hooks/core/useTheme';
+import { IPower, usePower } from 'hooks/usePower';
 
-import arrow from 'assets/arrow.svg';
+import Add from 'components/Add';
 
-import { Button } from 'components/Button';
-import { Card } from 'components/Card';
-import { Form } from 'components/Form';
-import { Remove } from 'components/Remove';
-import { Modal } from 'components/Modal';
+import { Power } from 'elements/Power';
 
-const powerInputs = [
-	{
-		name: 'name',
-		label: 'Name',
-		check: {
-			required: true,
-			max: 42,
-			min: 1,
-		},
-	},
-	{
-		name: 'cycles',
-		label: 'Cycles count',
-		type: 'number',
-		max: 7,
-		min: 2,
-		check: {
-			required: true,
-			max: 1,
-		},
-	},
-];
-
-interface IPower {
-	name: string;
-	cycles: number;
-	key: string;
-}
 const App = (): ReactElement => {
 	const [light, switchLight] = useTheme();
-	const [modal, setModal] = useState<boolean>(false);
-	const [powers, setPowers] = useState<IPower[]>([]);
 
-	const addPower = (newPower: IPower) => {
-		setModal(false);
-		setPowers([...powers, newPower]);
-	};
+	const { powers, updatePowers } = usePower();
 
-	const removePower = (keyToremove: string) => {
-		setPowers(current => current.filter(ps => ps.key !== keyToremove));
+	const basePower: IPower = {
+		id: `new-power-${powers.length}`,
+		name: `Power number ${powers.length + 1}`,
+		level: 1,
+		cycles: 7,
+		key: `power-${powers.length}`,
 	};
 
 	return (
 		<div className={`app ${light ? 'light' : 'dark'}`}>
 			<div className="app_title titles" onClick={switchLight}>
-				POWERS PWA
+				POWEERS
 			</div>
 			<div className="app_list">
-				{powers.map((power: IPower) => (
-					<Card className="app_list_item" key={power.name}>
-						<h2>{power.name}</h2>
-						<Remove onRemove={() => removePower(power.key)} />
-					</Card>
+				{powers.map((power: IPower, i: number) => (
+					<Power
+						id={power.id}
+						key={power.key}
+						index={i}
+						data={power}
+						save={(power: IPower) => updatePowers(power, 'update')}
+						remove={power => updatePowers(power, 'remove')}
+					/>
 				))}
+				<Add className="app_list_add" onClick={() => updatePowers(basePower, 'add')} />
 			</div>
-			<div className="app_action">
-				<Button type="secondary" onClick={() => setModal(true)}>
-					Nuevo poder
-				</Button>
+			<div className="app_action codes">
+				<h2>POWEERME</h2>
+				<p>by DECREIER 2022</p>
 			</div>
-			<Modal open={modal}>
-				<Form
-					submitLabel="Add Power"
-					onSubmit={power =>
-						addPower({
-							key: `${power.name} ${power.cycles}`,
-							name: power.name,
-							cycles: power.cycles,
-						})
-					}
-					inputs={powerInputs}
-				/>
-			</Modal>
 		</div>
 	);
 };
