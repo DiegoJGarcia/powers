@@ -7,7 +7,7 @@ export const handlePowerLevels = (exp: number): number => {
 	return 0;
 };
 
-export const handleLabelLevels = (exp: number): string => {
+export const handleLevelLabel = (exp: number): string => {
 	switch (exp) {
 		case 1:
 			return PowerLevels.noob;

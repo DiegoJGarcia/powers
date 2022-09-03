@@ -13,12 +13,15 @@
   
   &_title {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-between;
+    align-items: stretch;
+
+    background: var(--background_second);
     
-    padding: 20px;
-    cursor: pointer;
+    width: stretch;
+    padding: 20px 40px;
     color: var(--text_color);
+
   }
   
   &_list {

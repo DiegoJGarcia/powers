@@ -2,17 +2,18 @@ import { useEffect, useState } from 'react';
 
 type TypeUseThemeResponse = [defaultLight: boolean, switchLight: () => void];
 
-export const useTheme = (defaultStatus = true): TypeUseThemeResponse => {
+export const useTheme = (defaultStatus = false): TypeUseThemeResponse => {
 	const [light, setLight] = useState<boolean>(defaultStatus);
 
 	useEffect(() => {
-		const currentStatus: boolean = !!localStorage.getItem('light') || defaultStatus;
-		setLight(currentStatus);
+		defaultStatus ? localStorage.setItem('light', 'on') : localStorage.removeItem('light');
+		const cachedLight = localStorage.getItem('light');
+		setLight(defaultStatus || !!cachedLight);
 		return;
 	}, [defaultStatus]);
 
 	const switchLight = () => {
-		localStorage.setItem('light', JSON.stringify(!light));
+		!light ? localStorage.setItem('light', 'on') : localStorage.removeItem('light');
 		setLight(!light);
 	};
 

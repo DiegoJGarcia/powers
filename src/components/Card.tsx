@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useRef } from 'react';
+import React, { FC, ReactElement } from 'react';
 import './Card.scss';
 
 import remove from 'assets/error.svg';
@@ -14,13 +14,9 @@ type CardProps = {
 	onClick?: () => void;
 	onSave?: () => void;
 	onRemove?: () => void;
-	noEditable?: boolean;
 	noRemove?: boolean;
-	onPick?: () => void;
-	onDrag?: () => void;
-	onDrop?: () => void;
-	order?: any;
-	data?: any;
+	order?: number;
+	data?: unknown;
 };
 
 export const Card: FC<CardProps> = ({
@@ -31,41 +27,17 @@ export const Card: FC<CardProps> = ({
 	onClick,
 	onSave,
 	onRemove,
-	draggable,
 	noRemove = false,
-	onPick,
-	onDrag,
-	onDrop,
 	order,
 	data,
 }) => {
-	const draggingCard = useRef<any>(null);
-	const draggingBase = useRef<any>(null);
-
 	useDebounceEffect(() => data && enter(), data);
 
-	const enter = async () => {
+	const enter = () => {
 		return onSave && onSave();
 	};
 
-	const draggStart = (e: any) => {
-		draggingBase.current = e.target;
-		draggingBase.current.style = 'opacity: 0; transition: .1s';
-		draggingBase.current.addEventListener('draggEnd', draggEnd);
-
-		draggingCard.current = children;
-
-		return onPick && onPick();
-	};
-
-	const draggEnd = () => {
-		draggingCard.current = null;
-		draggingBase.current.removeEventListener('draggEnd', draggEnd);
-		draggingBase.current.style = '';
-		draggingBase.current = null;
-
-		return onDrop && onDrop();
-	};
+	console.log(status);
 
 	return (
 		<div
@@ -81,10 +53,6 @@ export const Card: FC<CardProps> = ({
 				onClick && onClick();
 			}}
 			key={id}
-			draggable={draggable}
-			onDragStart={draggStart}
-			onDragOver={onDrag}
-			onDragEnd={draggEnd}
 		>
 			{!noRemove && !order && (
 				<img
@@ -104,6 +72,7 @@ export const Card: FC<CardProps> = ({
 				</div>
 			)}
 			{children}
+
 			{status !== '' &&
 				(status === CardStatus.editing ? (
 					<div className="card_label card_label--save" onClick={enter}>

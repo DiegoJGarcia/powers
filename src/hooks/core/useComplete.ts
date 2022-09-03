@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const useComplete = <T>(item: T | any, condition?: string[]): boolean => {
 	const [completed, setCompleted] = useState(false);
 
 	useEffect(() => {
-		const notCompleted = !condition?.find(name => item[name] === '' || !item[name]);
-		setCompleted(notCompleted);
+		const isNotCompleted = !!condition?.find(
+			name =>
+				(typeof item[name] === 'number' ? item[name] === 0 : item[name] === '') || !item[name],
+		);
+		setCompleted(!isNotCompleted);
 		return;
 	}, [item, condition]);
 

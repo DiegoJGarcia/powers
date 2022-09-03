@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
-import add from 'assets/add.svg';
-
 import './Add.scss';
+
+import add from 'assets/add.svg';
 
 type AddProps = {
 	onClick: () => void;
@@ -11,11 +11,13 @@ type AddProps = {
 
 const Add: FC<AddProps> = ({ onClick, disabled, className }) => {
 	return (
-		<div className={`add${className ? ` ${className}` : ''}`}>
-			<button className="add_button" onClick={onClick} disabled={disabled}>
-				<img src={add} alt="add-button" />
-			</button>
-		</div>
+		<button
+			className={`add ${className ? ` ${className}` : ''}`}
+			onClick={onClick}
+			disabled={disabled}
+		>
+			<img src={add} alt="add-button" />
+		</button>
 	);
 };
 
