@@ -48,3 +48,7 @@ export enum paths {
 	profile = '/',
 	authentication = '/helping',
 }
+
+export const regex = {
+	numeric: new RegExp('^[0-9]+$'),
+};

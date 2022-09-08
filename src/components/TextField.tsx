@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, useEffect, useRef, useState } from 'react';
 
-import './Text.scss';
+import './TextField.scss';
 
-type TextProps = {
+type TextFieldProps = {
 	name: string;
 	label?: string;
 	value?: string;
@@ -11,28 +11,19 @@ type TextProps = {
 	readOnly?: boolean;
 	onBlur?: () => void;
 	onClick?: () => void;
-	onChange?: (value: any) => void;
+	onChange?: (value: string) => void;
 	max?: number;
 	className?: string;
 	align?: string;
 	prefix?: string;
 	suffix?: string;
 	showFix?: boolean;
-	inputmode?:
-		| 'text'
-		| 'search'
-		| 'none'
-		| 'tel'
-		| 'url'
-		| 'email'
-		| 'numeric'
-		| 'decimal'
-		| undefined;
+	inputmode?: 'text' | 'search' | 'none' | 'tel' | 'url' | 'email' | undefined;
 	maxWidth?: number;
 	firstFocus?: boolean;
 };
 
-export const Text: FC<TextProps> = ({
+export const TextField: FC<TextFieldProps> = ({
 	name,
 	value,
 	onChange,
@@ -64,7 +55,11 @@ export const Text: FC<TextProps> = ({
 		return;
 	}, [value, text, firstFocus]);
 
-	const innerChange = (e: any) => setText(e.target.value);
+	const innerChange = (e: Record<string, any>) => {
+		const newValue = String(e.target.value);
+		setText(newValue);
+		onChange && onChange(newValue);
+	};
 
 	return (
 		<div className="text" onClick={onClick} onBlur={onBlur} style={{ maxWidth: maxWidth + 'px' }}>
@@ -87,10 +82,10 @@ export const Text: FC<TextProps> = ({
 					}
 					onKeyPress={e => e.key === 'Enter' && textRef.current.blur()}
 					placeholder={placeholder || name}
-					onChange={() => (onChange && onChange(value)) || innerChange}
+					onChange={innerChange}
 					spellCheck={false}
 					readOnly={readOnly}
-					value={value || text}
+					value={value && value !== '' ? value : text}
 					maxLength={max}
 				/>
 				{(showFix || (value && suffix)) && <div className="ref text--extra">{suffix}</div>}

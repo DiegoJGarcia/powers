@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { cache } from 'common/container';
+import { useEffect, useState } from 'react';
 export interface IPower {
 	id: string;
 	name: string;
@@ -19,13 +20,29 @@ interface PowerResponse {
 export const usePower = (): PowerResponse => {
 	const [powers, setPowers] = useState<IPower[]>([]);
 
+	useEffect(() => {
+		const cachedPowers: IPower[] | any = cache.get('powers');
+
+		!!cachedPowers && setPowers(cachedPowers);
+		!!cachedPowers && console.log('CACHED DATA RESTORED');
+
+		return;
+	}, []);
+
 	const powerNameValidation = (powerName: string): boolean => {
 		const notDuplicated = !powers?.find(d => d.name === powerName);
 
 		return notDuplicated;
 	};
 
-	const addPower = (newPower: IPower) => {
+	const savePowers = async (updatedPowers: IPower[]) => {
+		await cache.set('powers', updatedPowers);
+		setPowers(updatedPowers);
+
+		console.log('POWERS SAVED SUCCESSFULLY');
+	};
+
+	const addPower = async (newPower: IPower) => {
 		const basePower: IPower = {
 			id: `new-power-${powers.length}`,
 			name: newPower.name,
@@ -35,17 +52,22 @@ export const usePower = (): PowerResponse => {
 			hitsNeeds: 7,
 		};
 
-		setPowers(current => [...current, basePower]);
+		const updatedPowers = await [...powers, basePower];
+
+		savePowers(updatedPowers);
 	};
 
-	const updatePower = (newPower: IPower) => {
-		const indexToupdate: number = powers.findIndex(p => p.name === newPower.name);
+	const updatePower = async (newPower: IPower) => {
+		const indexToupdate: number = await powers.findIndex(p => p.name === newPower.name);
+		const updatedPowers = await powers.splice(indexToupdate, 1, newPower);
 
-		setPowers(current => current.splice(indexToupdate, 1, newPower));
+		savePowers(updatedPowers);
 	};
 
-	const removePower = (powerName: string) => {
-		setPowers(current => current.filter(ps => ps.name !== powerName));
+	const removePower = async (powerName: string) => {
+		const updatedPowers = await powers.filter(ps => ps.name !== powerName);
+
+		savePowers(updatedPowers);
 	};
 
 	return { powers, addPower, updatePower, removePower, powerNameValidation };

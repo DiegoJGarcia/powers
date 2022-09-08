@@ -4,8 +4,8 @@ import './Power.scss';
 import { IPower, usePower } from 'hooks/usePower';
 
 import { Card } from 'components/Card';
-import { Number } from 'components/Number';
-import { Text } from 'components/Text';
+import { NumberField } from 'components/NumberField';
+import { TextField } from 'components/TextField';
 import { handleLevelLabel } from 'common/helpers';
 import { CardStatus } from 'common/constants';
 import { useComplete } from 'hooks/core/useComplete';
@@ -36,14 +36,14 @@ export const Power: FC<TPowerProps> = ({ id, key, data, save, remove, adding }) 
 	const completed = useComplete(power, ['name', 'hitsNeeds']);
 
 	const handleName = (value: string) => {
-		powerNameValidation(value);
+		const canCreate = powerNameValidation(value);
 		setPower({ ...power, name: value });
-		setPowerStatus('editing');
+		setPowerStatus(canCreate ? CardStatus.editing : CardStatus.error);
 	};
 
-	const handleHitsCount = (value: number) => {
+	const handleHitsNeeds = (value: number) => {
 		setPower({ ...power, hitsNeeds: value });
-		setPowerStatus('editing');
+		setPowerStatus(CardStatus.editing);
 	};
 
 	const savePower = () => {
@@ -60,7 +60,16 @@ export const Power: FC<TPowerProps> = ({ id, key, data, save, remove, adding }) 
 			className="power"
 			id={!adding ? id : 'new-power'}
 			key={key}
-			status={!adding ? powerStatus : completed ? CardStatus.editing : CardStatus.new}
+			// [TODO] mejorar lógica de estado
+			status={
+				powerStatus === CardStatus.error
+					? CardStatus.error
+					: !adding
+					? powerStatus
+					: completed
+					? CardStatus.editing
+					: CardStatus.new
+			}
 			onSave={!adding ? savePower : () => save(power)}
 			onRemove={() => remove(power)}
 		>
@@ -73,24 +82,24 @@ export const Power: FC<TPowerProps> = ({ id, key, data, save, remove, adding }) 
 			) : (
 				<>
 					<div className="power_level">
-						<Text
+						<TextField
 							firstFocus
 							className="values"
 							name="name"
 							label="Power"
-							value={power?.name}
-							onChange={e => handleName(e.target.value)}
+							value={power.name}
+							onChange={value => handleName(value)}
 							max={44}
 							maxWidth={270}
 						/>
 					</div>
 					<div className="power_hits">
-						<Number
+						<NumberField
 							className="values"
 							name="cycles"
 							label="Cycles"
-							value={power?.name}
-							onChange={e => handleHitsCount(e.target.value)}
+							value={power.hitsNeeds}
+							onChange={value => handleHitsNeeds(value)}
 							max={44}
 							maxWidth={270}
 						/>

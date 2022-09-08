@@ -37,8 +37,6 @@ export const Card: FC<CardProps> = ({
 		return onSave && onSave();
 	};
 
-	console.log(status);
-
 	return (
 		<div
 			onKeyPress={e => e.key === 'Enter' && enter()}
@@ -72,15 +70,19 @@ export const Card: FC<CardProps> = ({
 				</div>
 			)}
 			{children}
-
-			{status !== '' &&
-				(status === CardStatus.editing ? (
-					<div className="card_label card_label--save" onClick={enter}>
-						Guardar
-					</div>
-				) : (
-					<div className="card_label">{status === CardStatus.new ? 'Faltan datos' : 'Error'}</div>
-				))}
+			{status === CardStatus.editing ? (
+				<div className="card_label card_label--save" onClick={enter}>
+					Guardar
+				</div>
+			) : (
+				<div className="card_label">
+					{status === CardStatus.new
+						? 'Faltan datos'
+						: status === CardStatus.error
+						? 'Este nombre ya existe'
+						: ''}
+				</div>
+			)}
 		</div>
 	);
 };

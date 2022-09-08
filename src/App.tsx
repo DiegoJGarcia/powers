@@ -11,7 +11,7 @@ import { Hit } from 'elements/Hit';
 import Themer from 'components/Themer';
 
 const App = (): ReactElement => {
-	const [mode, setMode] = useState<string>('PREVIEW');
+	const [mode, setMode] = useState<string>('DETAILED');
 	const [emptyOne, setEmptyOne] = useState<boolean>(true);
 
 	const [light, switchLight] = useTheme();
